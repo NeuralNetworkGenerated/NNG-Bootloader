@@ -1,0 +1,79 @@
+**Contents of the NNG Bootloader Script:**
+
+1. **Global Declaration:**
+   - `global _start`: This line declares that `_start` is the entry point of the program.
+
+2. **Sections:**
+   - `.data`: This section is used for declaring and initializing global data variables.
+   - `.bss`: This section is used for declaring uninitialized global variables.
+   - `.text`: This section contains the actual assembly code.
+
+3. **Entry Point:**
+   - `_start`: This is the starting point of the program. The bootloader code begins executing from this point.
+
+4. **UEFI System Table Setup:**
+   - The bootloader loads the UEFI system table pointer and UEFI boot services pointer.
+
+5. **Console Output Protocol Setup:**
+   - The bootloader locates and sets up the console output protocol using the UEFI boot services.
+   
+6. **Framebuffer Initialization:**
+   - The bootloader allocates memory for the framebuffer and sets the graphics mode.
+
+7. **Drawing a Pixel and Printing a Message:**
+   - The bootloader draws a colored pixel on the screen.
+   - It prints the "NNG Bootloader" message on the screen using the simple text output protocol.
+
+8. **Text Configuration Menu Call:**
+   - A call to a placeholder function `print_text_configuration_menu` is added here. This is where the text-based configuration menu would be implemented.
+
+9. **Halt and Clean Up:**
+   - The bootloader halts execution and cleans up the allocated memory.
+
+10. **Error Handling:**
+    - This section handles errors in case something goes wrong during the execution.
+
+11. **Data and Constants:**
+    - Declaration of constants and data structures related to the UEFI system table and boot services.
+
+12. **Placeholder Functions:**
+    - `print_text_configuration_menu`: A placeholder for the text-based configuration menu. This function is intended to be implemented as per your requirements.
+
+**Tutorial: How to Load and Run the Bootloader:**
+
+1. **Write the Bootloader Script:**
+   - Save the provided bootloader script in a text file with the extension `.asm`. Name it something like `bootloader.asm`.
+
+2. **Install NASM:**
+   - If you don't already have NASM (Netwide Assembler) installed, install it on your system. NASM is used to assemble the assembly code into machine code.
+
+3. **Assemble the Code:**
+   - Open a terminal and navigate to the directory where your `bootloader.asm` file is located.
+   - Run the following command to assemble the code:
+     ```
+     nasm -f elf64 bootloader.asm -o bootloader.o
+     ```
+
+4. **Link the Object File:**
+   - Run the following command to link the object file and create an executable:
+     ```
+     ld bootloader.o -o bootloader.efi -Ttext 0x600000
+     ```
+
+5. **Generate UEFI Bootable Image:**
+   - You can use a tool like `objcopy` to generate a UEFI bootable image. Run the following command:
+     ```
+     objcopy -j .text -j .rodata -j .data -j .bss -S -O binary bootloader.efi bootloader.img
+     ```
+
+6. **Boot from the Image:**
+   - You can now boot the generated `bootloader.img` using UEFI boot options or a virtual machine (e.g., QEMU).
+
+**File Name and Type:**
+
+- Save the bootloader script as `bootloader.asm`.
+- The script is written in x86_64 assembly language.
+- It's essential to assemble it using NASM into an object file (`bootloader.o`) and then link it to create an EFI executable (`bootloader.efi`).
+- Finally, the EFI executable is converted into a UEFI bootable image (`bootloader.img`) using `objcopy`.
+
+Please note that this is a simplified tutorial for educational purposes, and the process may vary depending on the system you're using and the tools available. Additionally, the text configuration menu functionality has not yet been implemented within the `print_text_configuration_menu` function.
